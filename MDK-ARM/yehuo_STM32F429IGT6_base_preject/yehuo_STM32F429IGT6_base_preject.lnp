@@ -1,0 +1,26 @@
+--cpu=Cortex-M4.fp.sp
+"yehuo_stm32f429igt6_base_preject\startup_stm32f429xx.o"
+"yehuo_stm32f429igt6_base_preject\main.o"
+"yehuo_stm32f429igt6_base_preject\gpio.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_it.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_msp.o"
+"yehuo_stm32f429igt6_base_preject\system_stm32f4xx.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_tim.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_tim_ex.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_rcc.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_rcc_ex.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_flash.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_flash_ex.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_flash_ramfunc.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_gpio.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_dma_ex.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_dma.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_pwr.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_pwr_ex.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_cortex.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal.o"
+"yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_exti.o"
+--strict --scatter "yehuo_STM32F429IGT6_base_preject\yehuo_STM32F429IGT6_base_preject.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "yehuo_STM32F429IGT6_base_preject.map" -o yehuo_STM32F429IGT6_base_preject\yehuo_STM32F429IGT6_base_preject.axf

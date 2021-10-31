@@ -1,0 +1,1 @@
+yehuo_stm32f429igt6_base_preject\startup_stm32f429xx.o: startup_stm32f429xx.s
