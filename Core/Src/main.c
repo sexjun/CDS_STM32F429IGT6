@@ -95,7 +95,7 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
-    test();
+    key2_toggle_green_led_pin();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

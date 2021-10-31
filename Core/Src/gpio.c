@@ -71,13 +71,12 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
-void test()
+void key2_toggle_green_led_pin()
 {
     if (HAL_GPIO_ReadPin(KEY_2_GPIO_Port, KEY_2_Pin)) {
         while (HAL_GPIO_ReadPin(KEY_2_GPIO_Port, KEY_2_Pin)) {
             // do nothings
         }
-        // HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET);
         HAL_GPIO_TogglePin(LED_G_GPIO_Port, LED_G_Pin);
     }
 }

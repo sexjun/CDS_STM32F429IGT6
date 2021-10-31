@@ -32,7 +32,7 @@ extern "C" {
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
-void test();
+void key2_toggle_green_led_pin();
 /* USER CODE END Private defines */
 
 void MX_GPIO_Init(void);
