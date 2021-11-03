@@ -8,7 +8,8 @@
                 "${vcpkgRoot}/x86-windows/include",
                 "${workspaceFolder}",
                 "${workspaceFolder}/Core/Inc",
-                "${workspaceFolder}/Drivers/CMSIS/Core/Include"
+                "${workspaceFolder}/Drivers/CMSIS/Core/Include",
+                "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc"
             ],
             "defines": [
                 "_DEBUG",
