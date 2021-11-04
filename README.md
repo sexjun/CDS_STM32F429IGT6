@@ -176,6 +176,14 @@ typedef struct
 
 **cubemx实战：**
 
+首先要配置系统时钟，然后要将系统debug方式打开。
+
+![image-20211103233703692](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211103233703.png)
+
+
+
+![image-20211104104732833](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211104104732.png)
+
 1. 将引脚设置为复用输出
 
 ![image-20211103220627213](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211103220627.png)
@@ -189,6 +197,117 @@ typedef struct
 ![image-20211103220838051](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211103220838.png)
 
 4. 生成代码，使用keil编译复写中断服务函数
+
+
+
+![image-20211103225536010](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211103225536.png)
+
+
+
+在上面我们可以看到设置的是![image-20211104104925272](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211104104925.png)
+
+中断线0的中断，我们可以在中断向量表中查询该中断的响应函数为：`EXTI0_IRQHandler`
+
+> MDK-ARM\startup_stm32f429xx.s 中断向量表查询路径
+
+```c
+__Vectors       DCD     __initial_sp               ; Top of Stack
+DCD     EXTI0_IRQHandler                  ; EXTI Line0                  
+```
+
+然后可以在中断服务函数里找到该函数
+
+> Core\Src\stm32f4xx_it.c
+
+```c
+/**
+  * @brief This function handles EXTI line0 interrupt.
+  */
+void EXTI0_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
+
+  /* USER CODE END EXTI0_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+
+  /* USER CODE END EXTI0_IRQn 1 */
+}
+```
+
+可以看到这个函数将中断事件进行了分发，分发给了函数`HAL_GPIO_EXTI_IRQHandler` 我们点开这个函数再看一眼：
+
+> Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c
+
+```c
+void HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)
+{
+  /* EXTI line interrupt detected */
+  if(__HAL_GPIO_EXTI_GET_IT(GPIO_Pin) != RESET)
+  {
+    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
+    HAL_GPIO_EXTI_Callback(GPIO_Pin);
+  }
+}
+```
+
+我们看到这里再次对中断进行了一次判断，然后分发给了函数`HAL_GPIO_EXTI_Callback`这个函数就是统一的中断处理函数了。我们对中断的代码逻辑加在这一部分就可以了。我在这里对红色的led灯进行了翻转。
+
+> Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c
+
+```c
+__weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  key1_toggle_red_led_pin();
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(GPIO_Pin);
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the HAL_GPIO_EXTI_Callback could be implemented in the user file
+   */
+}
+```
+
+烧录进入开发板一切正常。
+
+
+
+我们来梳理一下流程：
+
+1. 配置系统时钟
+2. 配置debug方式
+3. 引脚设置为复用输出
+4. 选择沿触方式
+5. 生成代码，使用keil编译复写中断服务函数。
+    1. GPIO的中断服务响应函数定义在`stm32f4xx_hal_gpio.c`文件中，然后该文件将这个中断信号通过函数调用的方式分发给了`stm32f4xx_hal_gpio.c`文件
+    2. 我们实际的GPIO中断逻辑就都可以写在该文件路径下。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## git
 
