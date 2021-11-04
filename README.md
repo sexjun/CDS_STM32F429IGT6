@@ -269,6 +269,25 @@ __weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 烧录进入开发板一切正常。
 
+第二次重新生成工程的适合发现，**我写的代码没有了？？？？？？**
+
+我们仔细看这个函数的注释：这个函数不应该被修改，当这个回调需要的适合用户可以自己实现在自己的文件中。
+
+```c
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the HAL_GPIO_EXTI_Callback could be implemented in the user file
+   */
+```
+
+然后仔细一看这个函数是个 **弱函数**， 所以下来我们要自己实现。
+
+1. 首先新建一个文件：`Core\Src\cds_gpio_exit.c` 包含头文件`\#include "stm32f4xx_hal.h"`
+2. 复写函数：`void HAL_GPIO_EXTI_Callback(uint16_t *GPIO_Pin*)`
+3. 添加到keil编译环境中
+4. 烧录下载验证，一切ok。
+
+![image-20211104111503230](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211104111503.png)
+
 
 
 我们来梳理一下流程：
@@ -279,7 +298,8 @@ __weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 4. 选择沿触方式
 5. 生成代码，使用keil编译复写中断服务函数。
     1. GPIO的中断服务响应函数定义在`stm32f4xx_hal_gpio.c`文件中，然后该文件将这个中断信号通过函数调用的方式分发给了`stm32f4xx_hal_gpio.c`文件
-    2. 我们实际的GPIO中断逻辑就都可以写在该文件路径下。
+    2. 我们实际的GPIO中断逻辑就都可以写在该文件路径下。但是会代码耦合。
+    3. 重新定义回调函数，并实现。
 
 
 

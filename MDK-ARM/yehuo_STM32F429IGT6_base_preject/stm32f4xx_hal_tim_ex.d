@@ -27,3 +27,5 @@ yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HA
 yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+yehuo_stm32f429igt6_base_preject\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h

@@ -506,7 +506,6 @@ void HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)
   */
 __weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  key1_toggle_red_led_pin();
   /* Prevent unused argument(s) compilation warning */
   UNUSED(GPIO_Pin);
   /* NOTE: This function Should not be modified, when the callback is needed,

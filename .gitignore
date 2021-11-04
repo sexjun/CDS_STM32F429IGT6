@@ -71,3 +71,10 @@ dkms.conf
 *.dep
 *.iex
 # *.map
+Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/*.s
+Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/iar/linker/stm32*.icf
+Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/iar/startup*.s
+MDK-ARM/yehuo_STM32F429IGT6_base_preject.uvoptx
+*.o
+*.d
+*.crf
