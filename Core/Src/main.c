@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "string.h"
+#include <string.h>
 #include <stdint.h>
 /* USER CODE END Includes */
 
@@ -65,7 +65,11 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int _write(int file, char *ptr, int len)
+{
+    HAL_UART_Transmit(&huart1, (uint8_t*)ptr, len, HAL_MAX_DELAY);
+    return len;
+}
 /* USER CODE END 0 */
 
 /**
@@ -113,8 +117,9 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     // HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 100);
-    HAL_UART_Receive(&huart1, (uint8_t*)rec, 2, HAL_MAX_DELAY);
-    HAL_UART_Transmit(&huart1, (uint8_t *)rec, strlen(rec), 100);
+    // HAL_UART_Receive(&huart1, (uint8_t*)rec, 2, HAL_MAX_DELAY);
+    // HAL_UART_Transmit(&huart1, (uint8_t *)rec, strlen(rec), 100);
+     printf("Hello, STM32!\n");
     // HAL_GPIO_WritePin(GPIOH, GPIO_PIN_11, GPIO_PIN_SET);
     // HAL_Delay(500);
     // HAL_GPIO_WritePin(GPIOH, GPIO_PIN_11, GPIO_PIN_RESET);

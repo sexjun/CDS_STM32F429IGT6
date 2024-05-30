@@ -141,3 +141,21 @@
 
 ## 2. 串口与中断
 
+
+
+## 3. 串口与SMDA
+
+
+
+## 4. 串口与printf
+
+```c
+// 在main.c中实现该函数，后续printf就会使用uart进行打印。
+int _write(int file, char *ptr, int len)
+{
+    HAL_UART_Transmit(&huart1, (uint8_t*)ptr, len, HAL_MAX_DELAY);
+    return len;
+}
+
+```
+
