@@ -18,11 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stm32f4xx_hal_def.h"
 #include "stm32f4xx_hal_uart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "string.h"
+#include <stdint.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,6 +102,7 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
     char message[] = "Hello world\n";
+    char rec[2];
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -109,7 +112,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 100);
+    // HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 100);
+    HAL_UART_Receive(&huart1, (uint8_t*)rec, 2, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart1, (uint8_t *)rec, strlen(rec), 100);
     // HAL_GPIO_WritePin(GPIOH, GPIO_PIN_11, GPIO_PIN_SET);
     // HAL_Delay(500);
     // HAL_GPIO_WritePin(GPIOH, GPIO_PIN_11, GPIO_PIN_RESET);
