@@ -133,6 +133,17 @@
 
 - 代码设置
 
+  ```c
+  // 轮询模式
+  
+  // 发送数据  
+  HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 100);
+  // 接受数据
+  HAL_UART_Receive(&huart1, (uint8_t*)rec, 2, HAL_MAX_DELAY);
+  ```
+
+  
+
 ![image-20240530112136355](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/image-20240530112136355.png)
 
 - 串口接受
@@ -141,9 +152,118 @@
 
 ## 2. 串口与中断
 
+使用中断发送数据的方式与使用轮询发送数据的方式非常类似：
+
+```c
+ // 轮询模式
+
+// 发送数据  
+HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 100);
+// 接受数据
+HAL_UART_Receive(&huart1, (uint8_t*)rec, 2, HAL_MAX_DELAY);
+
+
+// 中断模式
+		   // 数据接收
+     HAL_UART_Receive_IT(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size)
+       // 数据发送
+     HAL_UART_Transmit_IT(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size)
+```
+
+
+
+![image-20240530203646817](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/image-20240530203646817.png)
+
+
+
+
+
+可以看到在 自动生成的代码中，已经为该中断生成了中断处理函数。我们进入 中断处理函数，i
+
+![image-20240530204328530](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/image-20240530204328530.png)
+
+
+
+根据函数的定义我们可以了解到，该函数主要的作用就是分类，因为该中断线中有很多触发源， UArt只是其中一种。
+
+```c
+/**
+  * @brief  This function handles UART interrupt request.
+  * @param  huart  Pointer to a UART_HandleTypeDef structure that contains
+  *                the configuration information for the specified UART module.
+  * @retval None
+  */
+void HAL_UART_IRQHandler(UART_HandleTypeDef *huart)
+```
+
+我们可以在该下面找到特定的，针对uart出发的中断callback函数，并且是`__weak`定义，我们可以在自己的代码中实现，并处理。
+
+```c
+/**
+  * @brief  Tx Half Transfer completed callbacks.
+  * @param  huart  Pointer to a UART_HandleTypeDef structure that contains
+  *                the configuration information for the specified UART module.
+  * @retval None
+  */
+__weak void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(huart);
+  /* NOTE: This function should not be modified, when the callback is needed,
+           the HAL_UART_TxHalfCpltCallback could be implemented in the user file
+   */
+}
+```
+
+
+
 
 
 ## 3. 串口与SMDA
+
+> 1. 接受不定长
+> 2. 彻底释放CPU？
+
+- 串口与SDMA
+
+```c
+// 使用DMA进行串口数据传输
+HAL_UART_Transmit_DMA(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size)
+HAL_UART_Receive_DMA(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size)
+  
+  
+// 使用空闲中断，当空闲发生的时候，则认为数据发送完毕，这个时候通过DMA将数据进行读取。
+  // 最后的参数size是指一次性最大读取的字符数，一般是缓存空间的大小，防止溢出。
+  HAL_UARTEx_ReceiveToIdle_DMA(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size)
+```
+
+需要注意的是，空闲中断函数和uart中断处理函数不是一个函数：
+
+
+
+- 空闲中断函数
+
+```c
+/**
+  * @brief  Reception Event Callback (Rx event notification called after use of advanced reception service).
+  * @param  huart UART handle
+  * @param  Size  Number of data available in application reception buffer (indicates a position in
+  *               reception buffer until which, data are available)
+  * @retval None
+  */
+__weak void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(huart);
+  UNUSED(Size);
+
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_UARTEx_RxEventCallback can be implemented in the user file.
+   */
+}
+```
+
+
 
 
 
@@ -159,3 +279,23 @@ int _write(int file, char *ptr, int len)
 
 ```
 
+# 5. 蓝牙
+
+> 蓝牙模块与数据打包
+
+分类：
+
+- 经典蓝牙
+  - 耳机
+- 低功耗蓝牙
+  - BLE： 手环
+
+手机充当主机 -----> STM从机
+
+![image-20240530221233620](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/image-20240530221233620.png)
+
+蓝牙串口透传模块：
+
+1. 复杂的蓝牙协议转化为串口透传
+2. STM串口发送给其的数据，原封不动的转发给主机。
+3. 主机发给蓝牙的数据，原封不动的通过串口发给从机。
