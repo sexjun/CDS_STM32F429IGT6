@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/MinSizeRel/windows_stm_test.elf",
+            "name": "Debug with JLink",
+            "request": "launch",
+            "type": "cortex-debug",
+            "device": "STM32F429IG",
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none",
+            "servertype": "jlink",
+            "serverpath": "D:/soft/jlink7.5/JLinkGDBServerCL.exe",
+            "serverArgs": [],
+            "interface": "jtag",
+            "armToolchainPath": "D:/cds_soft/cubeclt/stm32cubeclt_1.16.0/gnu-tools-for-stm32/bin"
+        },
+        {
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceFolder}/build/MinSizeRel/windows_stm_test.elf",
+            "name": "Debug with OpenOCD",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "configFiles": [
+                "interface ${workspaceFolder}/script/jlink.cfg",
+                "target ${workspaceFolder}/script/stm32f4x.cfg"
+            ],
+            "searchDir": [],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none"
+        },
+    ]
+}

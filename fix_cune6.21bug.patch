@@ -1,0 +1,79 @@
+diff --git a/STM32F429IGTx_FLASH.ld b/STM32F429IGTx_FLASH.ld
+index 2e1177d..d2c5f76 100644
+--- a/STM32F429IGTx_FLASH.ld
++++ b/STM32F429IGTx_FLASH.ld
+@@ -53,7 +53,7 @@
+ ENTRY(Reset_Handler)
+ 
+ /* Highest address of the user mode stack */
+-_estack = ORIGIN() + LENGTH();    /* end of RAM */
++_estack = ORIGIN(RAM) + LENGTH(RAM);    /* end of RAM */
+ /* Generate a link error if heap and stack don't fit into RAM */
+ _Min_Heap_Size = 0x200;      /* required amount of heap  */
+ _Min_Stack_Size = 0x400; /* required amount of stack */
+@@ -135,7 +135,7 @@ SECTIONS
+   _sidata = LOADADDR(.data);
+ 
+   /* Initialized data sections goes into RAM, load LMA copy after code */
+-  .data : 
++  .data :
+   {
+     . = ALIGN(4);
+     _sdata = .;        /* create a global symbol at data start */
+@@ -144,15 +144,15 @@ SECTIONS
+ 
+     . = ALIGN(4);
+     _edata = .;        /* define a global symbol at data end */
+-  } > AT> FLASH
++  } >RAM AT> FLASH
+ 
+   _siccmram = LOADADDR(.ccmram);
+ 
+-  /* CCM-RAM section 
+-  * 
+-  * IMPORTANT NOTE! 
++  /* CCM-RAM section
++  *
++  * IMPORTANT NOTE!
+   * If initialized variables will be placed in this section,
+-  * the startup code needs to be modified to copy the init-values.  
++  * the startup code needs to be modified to copy the init-values.
+   */
+   .ccmram :
+   {
+@@ -160,12 +160,12 @@ SECTIONS
+     _sccmram = .;       /* create a global symbol at ccmram start */
+     *(.ccmram)
+     *(.ccmram*)
+-    
++
+     . = ALIGN(4);
+     _eccmram = .;       /* create a global symbol at ccmram end */
+   } >CCMRAM AT> FLASH
+ 
+-  
++
+   /* Uninitialized data section */
+   . = ALIGN(4);
+   .bss :
+@@ -180,7 +180,7 @@ SECTIONS
+     . = ALIGN(4);
+     _ebss = .;         /* define a global symbol at bss end */
+     __bss_end__ = _ebss;
+-  } >
++  } > RAM
+ 
+   /* User_heap_stack section, used to check that there is enough RAM left */
+   ._user_heap_stack :
+@@ -191,9 +191,9 @@ SECTIONS
+     . = . + _Min_Heap_Size;
+     . = . + _Min_Stack_Size;
+     . = ALIGN(8);
+-  } >
++  } > RAM
++
+ 
+-  
+ 
+   /* Remove information from the standard libraries */
+   /DISCARD/ :

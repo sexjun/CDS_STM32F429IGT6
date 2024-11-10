@@ -1,0 +1,5 @@
+D:/github/windows_stm_test/CMakeFiles/windows_stm_test.dir
+D:/github/windows_stm_test/CMakeFiles/edit_cache.dir
+D:/github/windows_stm_test/CMakeFiles/rebuild_cache.dir
+D:/github/windows_stm_test/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+D:/github/windows_stm_test/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir

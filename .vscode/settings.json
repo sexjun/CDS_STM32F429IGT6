@@ -1,0 +1,12 @@
+{
+    "[cpp]": {
+        "editor.wordBasedSuggestions": "allDocuments",
+        "editor.semanticHighlighting.enabled": true,
+        "editor.stickyScroll.defaultModel": "foldingProviderModel",
+        "editor.suggest.insertMode": "replace"
+    },
+    "C_Cpp.autoAddFileAssociations": true,
+    "C_Cpp.autocomplete": "default",
+    "C_Cpp.suggestSnippets": true,
+    "C_Cpp.intelliSenseEngine": "default",
+}
