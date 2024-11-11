@@ -9,4 +9,8 @@
     "C_Cpp.autocomplete": "default",
     "C_Cpp.suggestSnippets": true,
     "C_Cpp.intelliSenseEngine": "default",
+    "files.associations": {
+        "main.h": "c",
+        "stm32f4xx_hal.h": "c"
+    },
 }
