@@ -1,18 +1,17 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    stm32f4xx_hal_timebase_TIM.c
+  * @file    stm32f4xx_hal_timebase_tim.c
   * @brief   HAL time base based on the hardware TIM.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2025 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -42,14 +41,12 @@ TIM_HandleTypeDef        htim3;
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
   RCC_ClkInitTypeDef    clkconfig;
-  uint32_t              uwTimclock = 0;
-  uint32_t              uwPrescalerValue = 0;
-  uint32_t              pFLatency;
-  /*Configure the TIM3 IRQ priority */
-  HAL_NVIC_SetPriority(TIM3_IRQn, TickPriority ,0);
+  uint32_t              uwTimclock, uwAPB1Prescaler = 0U;
 
-  /* Enable the TIM3 global Interrupt */
-  HAL_NVIC_EnableIRQ(TIM3_IRQn);
+  uint32_t              uwPrescalerValue = 0U;
+  uint32_t              pFLatency;
+
+  HAL_StatusTypeDef     status;
 
   /* Enable TIM3 clock */
   __HAL_RCC_TIM3_CLK_ENABLE();
@@ -57,8 +54,18 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   /* Get clock configuration */
   HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
 
+  /* Get APB1 prescaler */
+  uwAPB1Prescaler = clkconfig.APB1CLKDivider;
   /* Compute TIM3 clock */
-  uwTimclock = 2*HAL_RCC_GetPCLK1Freq();
+  if (uwAPB1Prescaler == RCC_HCLK_DIV1)
+  {
+    uwTimclock = HAL_RCC_GetPCLK1Freq();
+  }
+  else
+  {
+    uwTimclock = 2UL * HAL_RCC_GetPCLK1Freq();
+  }
+
   /* Compute the prescaler value to have TIM3 counter clock equal to 1MHz */
   uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000U) - 1U);
 
@@ -66,24 +73,42 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   htim3.Instance = TIM3;
 
   /* Initialize TIMx peripheral as follow:
-  + Period = [(TIM3CLK/1000) - 1]. to have a (1/1000) s time base.
-  + Prescaler = (uwTimclock/1000000 - 1) to have a 1MHz counter clock.
-  + ClockDivision = 0
-  + Counter direction = Up
-  */
+   * Period = [(TIM3CLK/1000) - 1]. to have a (1/1000) s time base.
+   * Prescaler = (uwTimclock/1000000 - 1) to have a 1MHz counter clock.
+   * ClockDivision = 0
+   * Counter direction = Up
+   */
   htim3.Init.Period = (1000000U / 1000U) - 1U;
   htim3.Init.Prescaler = uwPrescalerValue;
   htim3.Init.ClockDivision = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 
-  if(HAL_TIM_Base_Init(&htim3) == HAL_OK)
+  status = HAL_TIM_Base_Init(&htim3);
+  if (status == HAL_OK)
   {
     /* Start the TIM time Base generation in interrupt mode */
-    return HAL_TIM_Base_Start_IT(&htim3);
+    status = HAL_TIM_Base_Start_IT(&htim3);
+    if (status == HAL_OK)
+    {
+    /* Enable the TIM3 global Interrupt */
+        HAL_NVIC_EnableIRQ(TIM3_IRQn);
+      /* Configure the SysTick IRQ priority */
+      if (TickPriority < (1UL << __NVIC_PRIO_BITS))
+      {
+        /* Configure the TIM IRQ priority */
+        HAL_NVIC_SetPriority(TIM3_IRQn, TickPriority, 0U);
+        uwTickPrio = TickPriority;
+      }
+      else
+      {
+        status = HAL_ERROR;
+      }
+    }
   }
 
-  /* Return function status */
-  return HAL_ERROR;
+ /* Return function status */
+  return status;
 }
 
 /**
@@ -110,4 +135,3 @@ void HAL_ResumeTick(void)
   __HAL_TIM_ENABLE_IT(&htim3, TIM_IT_UPDATE);
 }
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

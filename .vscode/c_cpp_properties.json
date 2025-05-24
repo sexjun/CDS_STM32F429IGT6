@@ -20,8 +20,8 @@
             "compilerPath": "C:/Program Files/SoftwareDevelopment/Visal Studio/IDE/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-msvc-x64"
+            "intelliSenseMode": "windows-msvc-x64",
+            "compileCommands": "${workspaceFolder}/build/Debug/compile_commands.json"
         }
-    ],
-    "version": 4
+    ]
 }

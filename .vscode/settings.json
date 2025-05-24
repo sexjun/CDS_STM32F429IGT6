@@ -1,6 +1,11 @@
 {
-    "files.associations": {
-        "gpio.h": "c",
-        "main.h": "c"
-    }
+  "files.associations": {
+    "gpio.h": "c",
+    "main.h": "c"
+  },
+  "stm32-for-vscode.openOCDPath": false,
+  "stm32-for-vscode.makePath": false,
+  "cmake.cmakePath": "cube-cmake",
+  "cmake.configureArgs": ["-DCMAKE_COMMAND=cube-cmake"],
+  "cmake.preferredGenerators": ["Ninja"]
 }

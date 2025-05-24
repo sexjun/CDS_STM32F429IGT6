@@ -1,4 +1,28 @@
 # CDS_STM32F429IGT6
+
+
+# 环境配置
+## 环境配置vscode篇幅
+
+
+
+
+
+- 下载openocd
+- 
+
+## 环境配置clion
+
+[clion guide](https://www.jetbrains.com/help/clion/openocd-support.html#opecocd-debug)
+
+
+
+
+
+
+
+# 开发学习
+
 cds的野火STM32F429IGT6学习代码仓库
 
 

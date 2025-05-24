@@ -78,3 +78,5 @@ MDK-ARM/yehuo_STM32F429IGT6_base_preject.uvoptx
 *.o
 *.d
 *.crf
+build
+.cache

@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+        {
+            "label": "flash",
+            "type": "shell",
+            "command":["echo"],
+            "args": ["xxx"],
+            "group": "none",
+            "problemMatcher":"$armcc5",
+        }
+    ]
+}
