@@ -3,7 +3,7 @@
 [GENERAL]
   aATEModuleSel[24] = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   ConnectMode = 0
-  CurrentFile = ""
+  CurrentFile = "D:\github\CDS_STM32F429IGT6\build\Debug\yehuo_STM32F429IGT6_base_preject.elf"
   DataFileSAddr = 0x00000000
   GUIMode = 0
   HostName = ""

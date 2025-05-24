@@ -2,11 +2,21 @@
 
 
 # 环境配置
-## 环境配置vscode篇幅
+## 1. 环境配置vscode篇幅
+
+### 1.1 vscode插件下载
+
+首先参考ST官网的教程，下载vscode插件。[web链接](https://marketplace.visualstudio.com/items?itemName=stmicroelectronics.stm32-vscode-extension)
+
+![](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524223633227.png)
 
 
 
+下载之后在vscode侧边栏可以看到stm32插件的菜单。， 点击`user guide` 则可以看该插件配置教程。
 
+![image-20250524224144945](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524224144945.png)
+
+### 1.2 flash和debug 
 
 - 下载openocd
     - 下载vscode插件![](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524203048732.png)
@@ -16,13 +26,43 @@
     - 选择
 
 
-## 环境配置clion
+## 2. 环境配置clion
 
-[clion guide](https://www.jetbrains.com/help/clion/openocd-support.html#opecocd-debug)
+参考[clion 官网的guide即可](https://www.jetbrains.com/help/clion/openocd-support.html#opecocd-debug)
 
 
 
-- openocd
+
+
+## 3. pyocd
+
+
+
+- 安装
+    - `pip install pyocd`
+
+```shell
+
+
+# 列出设备
+pyocd list
+
+# 擦除芯片
+pyocd erase -t  stm32f429xg --chip
+
+# 下载程序
+pyocd flash -t stm32f429xg D:\github\CDS_STM32F429IGT6\cmake-build-debug\yehuo_STM32F429IGT6_base_preject.elf
+
+# 复位芯片
+pyocd reset -t stm32f429xg
+
+# 组合操作（擦除、下载、复位）
+pyocd flash -t stm32f429xg --erase chip D:\github\CDS_STM32F429IGT6\cmake-build-debug\yehuo_STM32F429IGT6_base_preject.elf -R
+
+
+```
+
+
 
 
 
@@ -30,14 +70,9 @@
 
 cds的野火STM32F429IGT6学习代码仓库
 
-
-
 **基础信息**
 
 1. 开发板是：野火STM32F429IGT6 V1
-2. CubeMx的版本是：6.3.0
-
-![image-20211103210632489](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211103210632.png)
 
 ## 1、 STM32CubeMX简单使用
 
