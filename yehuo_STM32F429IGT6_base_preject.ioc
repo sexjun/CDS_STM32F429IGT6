@@ -168,3 +168,4 @@ VP_SYS_VS_tim3.Signal=SYS_VS_tim3
 VP_TIM5_VS_ClockSourceITR.Mode=TriggerSource_ITR0
 VP_TIM5_VS_ClockSourceITR.Signal=TIM5_VS_ClockSourceITR
 board=custom
+rtos.0.ip=FREERTOS
