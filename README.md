@@ -9,7 +9,12 @@
 
 
 - 下载openocd
-- 
+    - 下载vscode插件![](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524203048732.png)
+    - 侧边栏自动配置![image-20250524203108684](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524203108684.png)
+
+- debug
+    - 选择
+
 
 ## 环境配置clion
 
@@ -17,7 +22,7 @@
 
 
 
-
+- openocd
 
 
 

@@ -97,7 +97,7 @@ void key2_toggle_green_led_pin()
             // do nothings
         }
         HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, GPIO_PIN_SET);
-        HAL_GPIO_TogglePin(LED_G_GPIO_Port, LED_R_Pin);
+        HAL_GPIO_TogglePin(LED_G_GPIO_Port, LED_G_Pin);
     }
 }
 
