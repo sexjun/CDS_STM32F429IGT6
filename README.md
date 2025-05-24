@@ -1,7 +1,7 @@
 # CDS_STM32F429IGT6
 
 
-# 环境配置
+# 一、环境配置
 ## 1. 环境配置vscode篇幅
 
 ### 1.1 vscode插件下载
@@ -66,7 +66,7 @@ pyocd flash -t stm32f429xg --erase chip D:\github\CDS_STM32F429IGT6\cmake-build-
 
 
 
-# 开发学习
+# 二、开发学习
 
 cds的野火STM32F429IGT6学习代码仓库
 
@@ -74,7 +74,21 @@ cds的野火STM32F429IGT6学习代码仓库
 
 1. 开发板是：野火STM32F429IGT6 V1
 
+
+
+我还有一块STM32F7的开发板，CUBEMX截至2025年5月24日是不支持这种有2核的MCU的。 所以暂时先用F429进行开发吧。
+
+
+
 ## 1、 STM32CubeMX简单使用
+
+有2个重要的设置需要注意： 
+
+![image-20211104104732833](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211104104732.png)
+
+![image-20211103225536010](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211103225536.png)
+
+
 
 1. 安装，这个全网都是教程，跳过。
 2. 新建项目，无脑下一步，没有什么难度。
@@ -224,6 +238,12 @@ typedef struct
   __HAL_RCC_GPIOB_CLK_ENABLE();
 ```
 
+### 3. cubemx的设置
+
+这里会有最大值，直接设置最大值后，CUBEMX会自动设置其它参数的。
+
+![image-20250524232707755](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524232707755.png)
+
 
 
 
@@ -240,13 +260,13 @@ typedef struct
 
 **cubemx实战：**
 
-首先要配置系统时钟，然后要将系统debug方式打开。
+首先要配置系统时钟
 
 ![image-20211103233703692](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211103233703.png)
 
 
 
-![image-20211104104732833](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211104104732.png)
+
 
 1. 将引脚设置为复用输出
 
@@ -264,7 +284,7 @@ typedef struct
 
 
 
-![image-20211103225536010](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211103225536.png)
+
 
 
 
@@ -367,6 +387,13 @@ __weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 
 
+### 4. freertos
+
+
+
+
+
+## 4. UART通讯
 
 
 
@@ -387,15 +414,4 @@ __weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 
 
-
-
-
-
-
-
-## git
-
-```
-git push origin HEAD:refs/for/master
-```
 
