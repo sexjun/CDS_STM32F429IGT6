@@ -93,6 +93,7 @@ int main(void)
   MX_TIM5_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  HAL_UART_Receive_IT(&huart3, uart3_rx_buffer, 2);
   /* USER CODE END 2 */
 
   /* Init scheduler */

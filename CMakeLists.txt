@@ -48,6 +48,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+      ${CMAKE_SOURCE_DIR}/Core/Src/cds_gpio_exit.c
 )
 
 # Add include paths

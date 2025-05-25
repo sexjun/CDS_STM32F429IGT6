@@ -115,13 +115,15 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+    (void) argument; /* Prevent unused argument(s) compilation warning */
   /* Infinite loop */
   for(;;)
   {
     key2_toggle_green_led_pin();
     osDelay(1);
     // test_uart_3();
-    uart3_recive_data();
+    // uart3_recive_data();
+
     osDelay(100);
   }
   /* USER CODE END StartDefaultTask */
