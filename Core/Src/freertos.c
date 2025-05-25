@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "gpio.h"
+#include "usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -119,6 +120,8 @@ void StartDefaultTask(void *argument)
   {
     key2_toggle_green_led_pin();
     osDelay(1);
+    test_uart_3();
+    osDelay(100);
   }
   /* USER CODE END StartDefaultTask */
 }

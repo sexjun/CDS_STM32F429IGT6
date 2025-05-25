@@ -387,7 +387,17 @@ __weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 
 
-### 4. freertos
+## 4. freertos
+
+
+
+这部分没什么说的，只需要勾选了操作系统即可：
+
+![image-20250525002141247](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250525002141247.png)
+
+
+
+
 
 
 
@@ -395,10 +405,9 @@ __weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 ## 4. UART通讯
 
+在这里我们使用开发板上的  `USART3` 作为例子
 
-
-
-
+![image-20250525002158699](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250525002158699.png)
 
 
 
