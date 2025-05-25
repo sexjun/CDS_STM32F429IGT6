@@ -22,6 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 #include "string.h"
+
+uint8_t uart3_rx_buffer[100]; // Buffer for receiving data
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart3;
@@ -114,5 +116,15 @@ void test_uart_3() {
     char *msg = "Hello from USART3!\r\n";
     HAL_UART_Transmit(&huart3, (uint8_t *)msg, strlen(msg), HAL_MAX_DELAY);
 }
+
+void uart3_send_string(char *str) {
+    HAL_UART_Transmit(&huart3, (uint8_t *)str, strlen(str), HAL_MAX_DELAY);
+}
+
+void uart3_recive_data() {
+    HAL_UART_Receive(&huart3, (uint8_t*)uart3_rx_buffer, 2, HAL_MAX_DELAY);
+    uart3_send_string((char *)uart3_rx_buffer);
+}
+
 
 /* USER CODE END 1 */

@@ -120,7 +120,8 @@ void StartDefaultTask(void *argument)
   {
     key2_toggle_green_led_pin();
     osDelay(1);
-    test_uart_3();
+    // test_uart_3();
+    uart3_recive_data();
     osDelay(100);
   }
   /* USER CODE END StartDefaultTask */
