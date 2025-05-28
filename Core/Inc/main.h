@@ -58,6 +58,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define DS18B20_PORT_Pin GPIO_PIN_2
+#define DS18B20_PORT_GPIO_Port GPIOE
 #define KEY_2_Pin GPIO_PIN_13
 #define KEY_2_GPIO_Port GPIOC
 #define LED_R_Pin GPIO_PIN_10
