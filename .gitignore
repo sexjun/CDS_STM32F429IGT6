@@ -81,3 +81,4 @@ MDK-ARM/yehuo_STM32F429IGT6_base_preject.uvoptx
 build
 .cache
 cmake-build-debug
+cmake*

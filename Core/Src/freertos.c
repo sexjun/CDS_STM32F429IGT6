@@ -19,9 +19,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "FreeRTOS.h"
-#include "task.h"
-#include "main.h"
+#include "bsp_ds18b20.h"
 #include "cmsis_os.h"
+#include "main.h"
+#include "task.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -33,6 +34,7 @@
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
+typedef StaticTask_t osStaticThreadDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -54,9 +56,21 @@
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+    .name = "defaultTask",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t)osPriorityNormal,
+};
+/* Definitions for myTask02 */
+osThreadId_t myTask02Handle;
+uint32_t myTask02Buffer[128];
+osStaticThreadDef_t myTask02ControlBlock;
+const osThreadAttr_t myTask02_attributes = {
+    .name = "myTask02",
+    .cb_mem = &myTask02ControlBlock,
+    .cb_size = sizeof(myTask02ControlBlock),
+    .stack_mem = &myTask02Buffer[0],
+    .stack_size = sizeof(myTask02Buffer),
+    .priority = (osPriority_t)osPriorityLow,
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,14 +79,15 @@ const osThreadAttr_t defaultTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
+void StartTask02(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /**
-  * @brief  FreeRTOS initialization
-  * @param  None
-  * @retval None
-  */
+ * @brief  FreeRTOS initialization
+ * @param  None
+ * @retval None
+ */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
@@ -96,7 +111,11 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  defaultTaskHandle =
+      osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of myTask02 */
+  myTask02Handle = osThreadNew(StartTask02, NULL, &myTask02_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -105,7 +124,6 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */
   /* USER CODE END RTOS_EVENTS */
-
 }
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -115,28 +133,54 @@ void MX_FREERTOS_Init(void) {
  * @retval None
  */
 /* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
-{
+void StartDefaultTask(void *argument) {
   /* USER CODE BEGIN StartDefaultTask */
   (void)argument; /* Prevent unused argument(s) compilation warning */
   /* Infinite loop */
+  printf("Default Task Running\r\n");
+  // Example of sending a string via UART
+  uint8_t response[] = "Hello from Default Task!\r\n";
+  HAL_UART_Transmit_DMA(&huart3, response, sizeof(response));
+
+  if (DS18B20_Init() == 0) {
+    printf("DS18B20 Init Success!\r\n");
+  } else {
+    printf("DS18B20 Init Failed!\r\n");
+  }
+
   for (;;) {
     key2_toggle_green_led_pin();
-    osDelay(1);
+    vTaskDelay(500); // 延时500ms
     // test_uart_3();
     // uart3_recive_data();
-    printf("Default Task Running\r\n");
-
-    // Example of sending a string via UART
-    uint8_t response[] = "Hello from Default Task!\r\n";
-    HAL_UART_Transmit_DMA(&huart3, response, sizeof(response));
-    osDelay(100);
+    uint8_t uc, DS18B20Id[8];
+    DS18B20_ReadId(DS18B20Id);
+    printf("\r\nDS18B20 serial number is:0x");
+    for (uc = 0; uc < 8; uc++) // 打印 DS18B20 的序列号
+      printf("%.2x", DS18B20Id[uc]);
+    float temperature = DS18B20_Get_Temp();
+    printf("\nDS18B20 temperature is:%0.3f\n\n", temperature);
   }
   /* USER CODE END StartDefaultTask */
+}
+
+/* USER CODE BEGIN Header_StartTask02 */
+/**
+ * @brief Function implementing the myTask02 thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_StartTask02 */
+void StartTask02(void *argument) {
+  /* USER CODE BEGIN StartTask02 */
+  /* Infinite loop */
+  for (;;) {
+    osDelay(1);
+  }
+  /* USER CODE END StartTask02 */
 }
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
 
 /* USER CODE END Application */
-

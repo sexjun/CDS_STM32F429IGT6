@@ -517,3 +517,34 @@ HAL_UART_Transmit_DMA()
 __HAL_DMA_DISABLE_IT(huart3.hdmarx, DMA_IT_HT);
 ```
 
+## 4.4 printf打印串口数据
+
+
+
+[参考guide](http://www.emcu.eu/how-to-implement-printf-for-send-message-via-usb-on-stm32-nucleo-boards-using-atollic/)
+
+- 添加对浮点数据的支持
+
+```cmake
+# Add compile options
+# Note: The -u _printf_float option is used to enable floating-point support in printf/scanf functions.
+target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+    -u _printf_float
+)
+```
+
+
+
+
+
+## 温度外设
+
+
+
+### DWT精确定时
+
+DWT 是 ARM Cortex-M 内核中提供的一个调试和性能分析模块，具有以下用途：
+
+- 周期计数（高精度延时）
+- 指令统计
+- 性能监控（如睡眠次数、中断次数等
