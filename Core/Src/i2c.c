@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "i2c.h"
+#include "stm32f4xx_hal_i2c.h"
 #include <stdint.h>
 #include <stdio.h>
 
@@ -206,9 +207,18 @@ uint32_t I2C_EE_BufferRead(uint8_t *pBuffer, uint8_t ReadAddr,
                            uint16_t NumByteToRead) {
   HAL_StatusTypeDef status = HAL_OK;
 
-  status =
-      HAL_I2C_Mem_Read(&hi2c1, EEPROM_ADDRESS, ReadAddr, I2C_MEMADD_SIZE_8BIT,
-                       (uint8_t *)pBuffer, NumByteToRead, 1000);
+  //   status =
+  //       HAL_I2C_Mem_Read(&hi2c1, EEPROM_ADDRESS, ReadAddr,
+  //       I2C_MEMADD_SIZE_8BIT,
+  //                        (uint8_t *)pBuffer, NumByteToRead, 1000);
+  //   using DMA read function ，
+  //   这里应该考虑是否应该在中断中处理，因为不知道什么时候读完？
+  status = HAL_I2C_Mem_Read_DMA(&hi2c1, EEPROM_ADDRESS, ReadAddr,
+                                I2C_MEMADD_SIZE_8BIT, (uint8_t *)pBuffer,
+                                NumByteToRead);
+
+  while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY) {
+  }
 
   return status;
 }
@@ -216,8 +226,11 @@ uint32_t I2C_EE_BufferRead(uint8_t *pBuffer, uint8_t ReadAddr,
 uint32_t I2C_EE_PageWrite(uint8_t *pBuffer, uint8_t WriteAddr,
                           uint8_t NumByteToWrite) {
   HAL_StatusTypeDef status = HAL_OK;
-  HAL_I2C_Mem_Write(&hi2c1, EEPROM_ADDRESS, WriteAddr, I2C_MEMADD_SIZE_8BIT,
-                    (uint8_t *)(pBuffer), NumByteToWrite, 100);
+  //   HAL_I2C_Mem_Write(&hi2c1, EEPROM_ADDRESS, WriteAddr,
+  //   I2C_MEMADD_SIZE_8BIT,
+  //                     (uint8_t *)(pBuffer), NumByteToWrite, 100);
+  HAL_I2C_Mem_Write_DMA(&hi2c1, EEPROM_ADDRESS, WriteAddr, I2C_MEMADD_SIZE_8BIT,
+                        (uint8_t *)(pBuffer), NumByteToWrite);
 
   while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY) {
   }

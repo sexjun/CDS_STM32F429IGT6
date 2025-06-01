@@ -164,7 +164,7 @@ void StartDefaultTask(void *argument) {
       printf("%.2x", DS18B20Id[uc]);
     float temperature = DS18B20_Get_Temp();
     printf("\nDS18B20 temperature is:%0.3f\n\n", temperature);
-    HAL_Delay(200); // Delay for 200 ms
+    HAL_Delay(2000); // Delay for 200 ms
   }
   /* USER CODE END StartDefaultTask */
 }
