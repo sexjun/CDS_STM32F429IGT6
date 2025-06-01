@@ -16,7 +16,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
   if (huart->Instance == USART3) {
-    HAL_UART_Transmit_IT(&huart3, uart3_rx_buffer,
+    HAL_UART_Transmit_IT(&huart1, uart3_rx_buffer,
                          sizeof(uart3_rx_buffer)); // Echo back received data
     // Check the received command and toggle the corresponding LED
     if (uart3_rx_buffer[0] == 'R') {
@@ -30,15 +30,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
       HAL_UART_Transmit_IT(huart, response, sizeof(response));
     }
     HAL_UARTEx_ReceiveToIdle_IT(
-        &huart3, uart3_rx_buffer,
+        &huart1, uart3_rx_buffer,
         sizeof(uart3_rx_buffer)); // Re-enable the interrupt for next reception
-    __HAL_DMA_DISABLE_IT(huart3.hdmarx, DMA_IT_HT);
+    __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
   }
 }
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
-  if (huart->Instance == USART3) {
-    HAL_UART_Transmit_DMA(&huart3, uart3_rx_buffer,
+  if (huart->Instance == USART1) {
+    HAL_UART_Transmit_DMA(&huart1, uart3_rx_buffer,
                           Size); // Echo back received data
     // Check the received command and toggle the corresponding LED
     if (uart3_rx_buffer[0] == 'R') {
@@ -51,13 +51,13 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
       HAL_GPIO_TogglePin(LED_B_GPIO_Port, LED_B_Pin); // Toggle blue LED
     } else {
       uint8_t response[] = "Invalid Command";
-      HAL_UART_Transmit_DMA(&huart3, response, sizeof(response));
+      HAL_UART_Transmit_DMA(&huart1, response, sizeof(response));
     }
     HAL_UARTEx_ReceiveToIdle_DMA(
-        &huart3, uart3_rx_buffer,
+        &huart1, uart3_rx_buffer,
         sizeof(uart3_rx_buffer)); // Re-enable the interrupt for next reception
     // 关闭DMA传输过半中断（HAL库默认开启，但我们只需要接收完成中断）
-    __HAL_DMA_DISABLE_IT(huart3.hdmarx, DMA_IT_HT);
+    __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
   }
 }
 
@@ -80,7 +80,7 @@ int fputc(int ch, FILE *f) {
   uint8_t c = (uint8_t)ch;
 
   /* 阻塞方式发送一个字符 */
-  HAL_UART_Transmit(&huart3, &c, 1, HAL_MAX_DELAY);
+  HAL_UART_Transmit(&huart1, &c, 1, HAL_MAX_DELAY);
   return ch;
 }
 
@@ -88,14 +88,14 @@ int fputc(int ch, FILE *f) {
 int fgetc(FILE *f) {
   uint8_t c;
   /* 阻塞方式接收一个字符 */
-  HAL_UART_Receive(&huart3, &c, 1, HAL_MAX_DELAY);
+  HAL_UART_Receive(&huart1, &c, 1, HAL_MAX_DELAY);
   return c; // 返回接收到的字符
 }
 
 int __io_putchar(int ch) {
   uint8_t c[1];
   c[0] = ch & 0x00FF;
-  HAL_UART_Transmit(&huart3, &*c, 1, 10);
+  HAL_UART_Transmit(&huart1, &*c, 1, 10);
   return ch;
 }
 

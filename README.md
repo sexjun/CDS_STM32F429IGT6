@@ -1,5 +1,21 @@
 # CDS_STM32F429IGT6
 
+很多年前买了野火的开发板，一直吃灰(有其他重要的事情)
+
+最近抽出一点时间，打算系统的学习一下这个开发板，主要是我个人想要开发一个小器件。
+
+文档是出于记录的目的，防止忘记。
+
+
+
+**本文参考：**
+
+视频参考的是B站keysking和野火官方2个up主， 文档就比较多了，不在详细记录。
+
+
+
+
+
 
 # 一、环境配置
 ## 1. 环境配置vscode篇幅
@@ -16,7 +32,7 @@
 
 ![image-20250524224144945](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524224144945.png)
 
-### 1.2 flash和debug 
+### 1.2 flash和debug
 
 - 下载openocd
     - 下载vscode插件![](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524203048732.png)
@@ -103,7 +119,11 @@ pyocd flash -t stm32f429xg --erase chip D:\github\CDS_STM32F429IGT6\cmake-build-
 
 
 
+## 4. 串口工具
 
+1. vscode插件：Serial monitor
+2. pyqt写的开源工具： comtool
+3. 开源可视化工具： Serial Studio
 
 # 二、开发学习
 
@@ -121,7 +141,7 @@ cds的野火STM32F429IGT6学习代码仓库
 
 ## 1、 STM32CubeMX简单使用
 
-有2个重要的设置需要注意： 
+有2个重要的设置需要注意：
 
 ![image-20211104104732833](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com/20211104104732.png)
 
@@ -189,7 +209,7 @@ keil编译下载进去，效果还可以。
 
 - 一般设置(F429举例)
 
-HCLK = SYSCLK=PLLCLK= 180M，PCLK1=HCLK/2 = 90M，PCLK1=HCLK/4 = 45M 
+HCLK = SYSCLK=PLLCLK= 180M，PCLK1=HCLK/2 = 90M，PCLK1=HCLK/4 = 45M
 
 - 时钟树
 
@@ -245,7 +265,7 @@ HCLK = SYSCLK=PLLCLK= 180M，PCLK1=HCLK/2 = 90M，PCLK1=HCLK/4 = 45M
 主要是配置这二个结构体分别配置：
 
 1. 系统时钟源头。
-2. RCC System, AHB and APB busses clock configuration 
+2. RCC System, AHB and APB busses clock configuration
 
 ```c
 /**
@@ -335,7 +355,7 @@ typedef struct
 
 ```c
 __Vectors       DCD     __initial_sp               ; Top of Stack
-DCD     EXTI0_IRQHandler                  ; EXTI Line0                  
+DCD     EXTI0_IRQHandler                  ; EXTI Line0
 ```
 
 然后可以在中断服务函数里找到该函数
@@ -488,7 +508,7 @@ void USART3_IRQHandler(void)
   /* USER CODE BEGIN USART3_IRQn 0 */
 
   /* USER CODE END USART3_IRQn 0 */
-  HAL_UART_IRQHandler(&huart3);
+  HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART3_IRQn 1 */
 
   /* USER CODE END USART3_IRQn 1 */
@@ -508,7 +528,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 ```c
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart->Instance == USART3) {
-        HAL_UART_Transmit_IT(&huart3, uart3_rx_buffer, 2); // Echo back received data
+        HAL_UART_Transmit_IT(&huart1, uart3_rx_buffer, 2); // Echo back received data
         // Check the received command and toggle the corresponding LED
         if(uart3_rx_buffer[0] == 'R') {
             HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin); // Toggle red LED
@@ -538,7 +558,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 ```C
 // 中断接受数据
 HAL_UART_Transmit_IT()
-    
+
 // DMA接受数据
 HAL_UART_Transmit_DMA()
 ```
@@ -553,7 +573,7 @@ HAL_UART_Transmit_DMA()
 
 ```c
 // 关闭DMA传输过半中断（HAL库默认开启，但我们只需要接收完成中断）
-__HAL_DMA_DISABLE_IT(huart3.hdmarx, DMA_IT_HT);
+__HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
 ```
 
 ### 4.4 printf打印串口数据
@@ -586,7 +606,9 @@ target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
 
 
 
+## 6. SPI
 
+FLSAH 存储器又称闪存，它与 EEPROM 都是掉电后数据不丢失的存储器，但 FLASH存储器容量普遍大于 EEPROM，现在基本取代了它的地位。我们生活中常用的 U 盘、SD卡、SSD 固态硬盘以及我们 STM32 芯片内部用于存储程序的设备，都是 FLASH 类型的存储器。在存储控制上，最主要的区别是 FLASH 芯片只能一大片一大片地擦写，而在“I2C章节”中我们了解到 EEPROM 可以单个字节擦写。
 
 
 
@@ -638,6 +660,10 @@ PE2口就是我们要读取的口，根据该口配置相关IO即可。
 
 
 
+EEPROM是是可以存储数据的，断电数据不会消失。
+
+
+
 
 
 
@@ -651,4 +677,4 @@ DWT 是 ARM Cortex-M 内核中提供的一个调试和性能分析模块，具�
 - 周期计数（高精度延时）
 - 指令统计
 - 性能监控（如睡眠次数、中断次数等
-- 
+-

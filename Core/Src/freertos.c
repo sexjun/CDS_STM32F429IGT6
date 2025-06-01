@@ -20,10 +20,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
-#include "cmsis_os2.h"
 #include "main.h"
-#include "stm32f4xx_hal.h"
 #include "task.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -143,7 +142,7 @@ void StartDefaultTask(void *argument) {
   printf("Default Task Running\r\n");
   // Example of sending a string via UART
   uint8_t response[] = "Hello from Default Task!\r\n";
-  HAL_UART_Transmit_DMA(&huart3, response, sizeof(response));
+  HAL_UART_Transmit_DMA(&huart1, response, sizeof(response));
 
   if (DS18B20_Init() == 0) {
     printf("DS18B20 Init Success!\r\n");
