@@ -23,7 +23,46 @@
     - 侧边栏自动配置![image-20250524203108684](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524203108684.png)
 
 - debug
-    - 选择
+
+
+
+配置 lanuch.json
+
+```json
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "stlinkgdbtarget",
+      "request": "launch",
+      "name": "STM32Cube: STM32 Launch ST-Link GDB Server",
+      "origin": "snippet",
+      "cwd": "${workspaceFolder}",
+      "runEntry": "main",
+      "imagesAndSymbols": [
+        {
+          "imageFileName": "${command:st-stm32-ide-debug-launch.get-projects-binary-from-context1}"
+        }
+      ]
+    }
+  ]
+}
+```
+
+然后按下F5进行debug， 如果有问题，则可以点击STM32的vscode插件，配置下环境：
+
+![image-20250601223024247](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250601223024247.png)
+
+
+
+[STM32论坛这里也有问答关于这个问题的](https://community.st.com/t5/stm32cube-for-visual-studio-code/missing-cmsis-pack-root/td-p/804489)
+
+
+
+
 
 
 ## 2. 环境配置clion
@@ -242,7 +281,7 @@ typedef struct
 
 这里会有最大值，直接设置最大值后，CUBEMX会自动设置其它参数的。
 
-![image-20250524232707755](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524232707755.png)
+![image-20250524232707755](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250524232707755.png)；；；；llklkkktyfty
 
 
 
@@ -517,7 +556,7 @@ HAL_UART_Transmit_DMA()
 __HAL_DMA_DISABLE_IT(huart3.hdmarx, DMA_IT_HT);
 ```
 
-## 4.4 printf打印串口数据
+### 4.4 printf打印串口数据
 
 
 
@@ -537,7 +576,71 @@ target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
 
 
 
-## 温度外设
+## 5. I2C协议
+
+我看的up主是使用I2C协议控制OLED屏幕，我没有OLED屏幕......
+
+只有一块RGB屏幕，是要走比较复杂的协议LTDC， 我先学习下I2C协议吧。
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 外设篇
+
+## 温度外设-普通GPIO
+
+温度传感器为： DS18B20
+
+每一个芯片都有自己独立的ID，本模块需连接的引脚仅三根，除去基础的 VCC 电源线以及 GND 地线以外，只剩下 DATA 数据线，
+
+将数据线连接至任意 GPIO，保证该 IO 口收发数据正常即可完成对 DHT11 模块的控制。
+
+![image-20250529215453876](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250529215453876.png)
+
+
+
+所以驱动温度外设就特别简单，2个引脚是正负极。另外一个引脚是GPIO，设置为输入输出模式，用于读取温度和芯片ID即可。
+
+![image-20250529215612987](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250529215612987.png)
+
+看图可知：
+
+![image-20250529220055128](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250529220055128.png)
+
+
+
+PE2口就是我们要读取的口，根据该口配置相关IO即可。
+
+
+
+## EEPROM外设-I2C
+
+
+
+![image-20250529220254164](https://tu-chuang-1253216127.cos.ap-beijing.myqcloud.com//202408/image-20250529220254164.png)
+
+
+
+
+
+型号是： AT24C02。 芯片手册在立创商城搜索这个型号就可以下载。
+
+是I2C1的接口， 通过这个接口就可以读写。
+
+
+
+
+
+
 
 
 
@@ -548,3 +651,4 @@ DWT 是 ARM Cortex-M 内核中提供的一个调试和性能分析模块，具�
 - 周期计数（高精度延时）
 - 指令统计
 - 性能监控（如睡眠次数、中断次数等
+- 

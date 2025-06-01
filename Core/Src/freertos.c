@@ -19,15 +19,18 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "FreeRTOS.h"
-#include "bsp_ds18b20.h"
 #include "cmsis_os.h"
+#include "cmsis_os2.h"
 #include "main.h"
+#include "stm32f4xx_hal.h"
 #include "task.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "bsp_ds18b20.h"
 #include "cds_gpio_exit.h"
 #include "gpio.h"
+#include "i2c.h"
 #include "stdio.h"
 #include "usart.h"
 
@@ -148,9 +151,10 @@ void StartDefaultTask(void *argument) {
     printf("DS18B20 Init Failed!\r\n");
   }
 
+  i2c_test();
+
   for (;;) {
     key2_toggle_green_led_pin();
-    vTaskDelay(500); // 延时500ms
     // test_uart_3();
     // uart3_recive_data();
     uint8_t uc, DS18B20Id[8];
@@ -160,6 +164,7 @@ void StartDefaultTask(void *argument) {
       printf("%.2x", DS18B20Id[uc]);
     float temperature = DS18B20_Get_Temp();
     printf("\nDS18B20 temperature is:%0.3f\n\n", temperature);
+    HAL_Delay(200); // Delay for 200 ms
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -173,6 +178,7 @@ void StartDefaultTask(void *argument) {
 /* USER CODE END Header_StartTask02 */
 void StartTask02(void *argument) {
   /* USER CODE BEGIN StartTask02 */
+  (void)argument; /* Prevent unused argument(s) compilation warning */
   /* Infinite loop */
   for (;;) {
     osDelay(1);
